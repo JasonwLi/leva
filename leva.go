@@ -40,7 +40,7 @@ func get_player_times(w http.ResponseWriter, r *http.Request) {
     player_time_copy.Duration += time.Since(player_time_copy.Time).Seconds();
     time_store_snapshot[k] = player_time_copy;
   }
-  rw_mutex.RUnlock();    
+  rw_mutex.RUnlock();
   w.Header().Set("Content-Type", "application/json; charset=UTF-8");
   json.NewEncoder(w).Encode(time_store_snapshot);
 }
@@ -58,12 +58,11 @@ func purge_loop() {
   }
 }
 
-
-
 func main() {
   time_store = make(map[string]PlayerTime);
   go purge_loop();
-  http.HandleFunc("/set_time", set_player_time);
-  http.HandleFunc("/get_times", get_player_times);
+  http.HandleFunc("/api/set_time", set_player_time);
+  http.HandleFunc("/api/get_times", get_player_times);
+  http.Handle("/", http.FileServer(http.Dir("static")));
   log.Fatal(http.ListenAndServe(":8080", nil));
 }
