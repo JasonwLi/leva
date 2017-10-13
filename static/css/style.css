@@ -5,6 +5,11 @@
   padding-bottom: 56.25%;
 }
 
+#playerrow {
+  width: 100%;
+  min-width: 500px;
+}
+
 #av {
   position: absolute;
   width: 100%;

@@ -20,7 +20,6 @@ function updateView() {
   if (!timeBank.started) return;
   current = new Date();
   seconds_elapsed = (current - timeBank.last_updated)/1000;
-  console.log(seconds_elapsed);
   var time_array = [];
   $.map(timeBank.times, function(v, k) {
     time_array.push({name: v.name, duration: v.duration});
@@ -34,10 +33,15 @@ function updateView() {
   var table = $("#viewertab");
   table.empty();
   $.map(time_array, function(v) {
-    console.log(v.name);
     var row = $("<tr/>");
     row.append($("<td/>").text(v.name));
     row.append($("<td/>").text(secondsToHms(v.duration)));
+    var sync_button = $('<input type="button" value="seek here"/>');
+    sync_button.click(function() {
+      var current_time = v.duration;
+      player.seekTo(current_time + 0.5);
+    });
+    row.append($("<td/>").append(sync_button));
     table.append(row);
   });
 }
@@ -52,7 +56,6 @@ function secondsToHms(d) {
 
 var name = "gong" + (new Date).getTime()%23157;
 function onYouTubeIframeAPIReady() {
-  console.log("test");
   player = new YT.Player('av', {
     events: {
       'onReady': onPlayerReady,
@@ -65,24 +68,23 @@ function getCurrentTime() {
 }
 
 function postTime() {
-  console.log("posting time");
   $.post("api/set_time", JSON.stringify(getCurrentTime()), "json");
 }
 
 function getTimes() {
   $.getJSON("api/get_times").done( function(data) {
-    console.log(data);
     times = data;
     timeBank.updateData(data);
   });
 }
 
+var updateLoop = setInterval(updateView, 750);
+var getLoop = setInterval(getTimes, 3000);
+
 function onPlayerReady(event) {
   document.getElementById('av').style.borderColor = '#FF6D00';
   event.target.playVideo();
-  var updateLoop = setInterval(updateView, 750);
-  var sendLoop = setInterval(postTime, 5000);
-  var getLoop = setInterval(getTimes, 5000);
+  var sendLoop = setInterval(postTime, 3000);
 }
 
 $( document ).ready(function() {
@@ -93,4 +95,7 @@ $( document ).ready(function() {
     name = namebox.val();
   });
   $("#kiminona").text("your name is: " + name);
+  $("#close_chat").click(function() {
+    $("#chat_embed").toggle('show');
+  });
 });
