@@ -22,7 +22,7 @@ function updateView() {
   seconds_elapsed = (current - timeBank.last_updated)/1000;
   var time_array = [];
   $.map(timeBank.times, function(v, k) {
-    time_array.push({name: v.name, duration: v.duration});
+    time_array.push({name: v.name.substring(0, 40), duration: v.duration});
   });
   time_array.sort(function(a, b) {
     return a.name.localeCompare(b.name);
@@ -98,4 +98,18 @@ $( document ).ready(function() {
   $("#close_chat").click(function() {
     $("#chat_embed").toggle('show');
   });
+  $("#dark_button").click(function() {
+    $("body").css("color", "rgb(190, 190, 190)");
+    $("body").css("background-color", "rgb(38, 38, 38)");
+  });
+  $("#light_button").click(function() {
+    $("body").css("color", "black");
+    $("body").css("background-color", "white");
+  });
+
+  $("#close_chat").click(function() {
+    $("#chat_embed").toggle('show');
+  });
+
+
 });
