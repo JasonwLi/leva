@@ -36,7 +36,7 @@ function updateView() {
     var row = $("<tr/>");
     row.append($("<td/>").text(v.name));
     row.append($("<td/>").text(secondsToHms(v.duration)));
-    var sync_button = $('<input type="button" value="seek here"/>');
+    var sync_button = $('<input type="button" value="过来"/>');
     sync_button.click(function() {
       var current_time = v.duration;
       player.seekTo(current_time + 0.5);
@@ -54,7 +54,7 @@ function secondsToHms(d) {
   return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
 }
 
-var name = "gong" + (new Date).getTime()%23157;
+var name = "龚" + (new Date).getTime()%23157;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('av', {
     events: {
@@ -106,10 +106,5 @@ $( document ).ready(function() {
     $("body").css("color", "black");
     $("body").css("background-color", "white");
   });
-
-  $("#close_chat").click(function() {
-    $("#chat_embed").toggle('show');
-  });
-
 
 });
